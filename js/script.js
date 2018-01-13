@@ -110,15 +110,35 @@ function createCalendar (date) {
     setEvent(events);
 }
 
+function modalShow(description) {
+    let modal = document.querySelector('.cws-modal');
+    modal.style.display = 'block';
+    let content = document.querySelector('.cws-modal-container');
+    content.innerHTML = description;
+    let bg = document.querySelector('.cws-modal-bg');
+    bg.style.display = 'block';
+}
+function modalClose() {
+    let modal = document.querySelector('.cws-modal');
+    modal.style.display = 'none';
+    let bg = document.querySelector('.cws-modal-bg');
+    bg.style.display = 'none';
+}
 function setEvent(data) {
     data.forEach(d => {
         let target = document.querySelector('#cws-' + pad(d.year, 4) + pad(d.month, 2) + pad(d.date, 2));
         if (target === null) return;
         let eventdom = document.createElement('div');
         eventdom.innerText = d.title;
+        eventdom.addEventListener('click', () => {
+            modalShow(d.description);
+        });
         target.appendChild(eventdom);
     });
 }
+document.querySelector('.cws-modal-close a').addEventListener('click', () => {
+    modalClose();
+});
 
 createCalendar(today);
 

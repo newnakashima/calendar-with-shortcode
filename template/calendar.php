@@ -18,4 +18,15 @@
   </div>
 </div>
 
+<div class="cws-modal">
+  <div class="cws-modal-container">
+    ...
+  </div>
+  <div class="cws-modal-close">
+    <a>x 閉じる</a>
+  </div>
+</div>
+
+<div class="cws-modal-bg"></div>
+
 <script src="<?= plugins_url('', __DIR__) ?>/js/script.js"></script>

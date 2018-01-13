@@ -80,3 +80,31 @@ a.cws-nextmonth:after {
     background-color: #dddddd;
 }
 
+/* モーダル */
+.cws-modal {
+    display: none;
+    z-index: 2000;
+    position: fixed;
+    width: 50%;
+    left: calc(50vw - 25%);
+    top: 25vh;
+    background-color: #fff;
+}
+
+.cws-modal-bg {
+    display: none;
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120%;
+    background-color: #00000088;
+}
+
+@media screen and (max-width: 768px) {
+    .cws-modal {
+        width: 80%;
+        left: calc(50vw - 40%);
+    }
+}
