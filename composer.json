@@ -1,0 +1,13 @@
+{
+    "name": "nakashima/calendar_with_shortcode",
+    "description": "calendar for wordpress with shortcode",
+    "type": "library",
+    "license": "GPLv2",
+    "authors": [
+        {
+            "name": "newnakashima",
+            "email": "newnakashima2014@gmail.com"
+        }
+    ],
+    "require": {}
+}
