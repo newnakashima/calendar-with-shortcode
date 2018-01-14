@@ -123,7 +123,7 @@ function createCalendar (date) {
         day.innerHTML = '<a class="cws-day-number">' + i + '</a>';
         calendar.appendChild(day);
     }
-    ajaxRequest('/wp-json/wp/v2/events', (res) => {
+    ajaxRequest('/wp-json/wp/v2/events?per_page=100', (res) => {
         let json = JSON.parse(res);
         createEvents(json);
     });
