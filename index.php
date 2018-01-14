@@ -24,9 +24,6 @@ add_action( 'admin_menu', 'my_submenu' );
 // });
 //
 
-global $wp_rewrite;
-$wp_rewrite->flush_rules();
-
 /** ステップ1 */
 function my_plugin_menu() {
 	add_menu_page( 'My Plugin Options', 'My Plugin', 'manage_options', 'my-plugin-identifier', 'my_plugin_options', '', 6 );
