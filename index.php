@@ -75,56 +75,76 @@ function create_post_type() {
         'public' => true,
         'has_archive' => true,
         'menu_position' => 5,
-        'supports' => $exampleSupports
+        'supports' => $exampleSupports,
+        'show_in_rest' => true,
+        'rest_base' => 'events',
     ]);
+    register_taxonomy('event_type', 'event', ['label' => 'イベントタイプ', 'hierarchical' => true]);
 }
 add_action('init', 'create_post_type');
 
-// カスタムフィールド
-function add_book_fields() {
-    add_meta_box('book_setting', '本の情報', 'insert_book_fields', 'event', 'normal');
+// jquery
+function plugin_enqueue_jqueryUi() {
+    wp_enqueue_style('jquery-ui.min.css', plugins_url('', __FILE__) . '/lib/jquery-ui/jquery-ui.min.css');
+    // wp_enqueue_script('jquery-3.2.1.min.js', plugins_url('', __FILE__) . '/lib/jquery/jquery-3.2.1.min.js');
+    // wp_enqueue_script('jquery-ui.min.js', plugins_url('', __FILE__) . '/lib/jquery-ui/jquery-ui.min.js');
 }
-add_action('admin_menu', 'add_book_fields');
+add_action('admin_head', 'plugin_enqueue_jqueryUi');
 
-function insert_book_fields() {
+// カスタムフィールド
+function add_event_fields() {
+    add_meta_box('event_setting', 'イベントの情報', 'insert_event_fields', 'event', 'normal');
+}
+add_action('admin_menu', 'add_event_fields');
+
+add_action('rest_api_init', function () {
+    register_rest_field(
+        'event',
+        'event_meta',
+        [
+            'get_callback' => function ($object, $field_name, $request) {
+                $meta_fields = [
+                    'cws_event_date',
+                ];
+                $meta = [];
+                foreach ($meta_fields as $field) {
+                    $meta[$field] = get_post_meta($object['id'], $field, true);
+                }
+                return $meta;
+            },
+            'update_callback' => null,
+            'schema'          => null,
+        ]
+    );
+});
+
+function insert_event_fields() {
+
+    echo '<script src="' . plugins_url('', __FILE__) . '/lib/jquery/jquery-3.2.1.min.js"></script>';
+    echo '<script src="' . plugins_url('', __FILE__) . '/lib/jquery-ui/jquery-ui.min.js"></script>';
+
     global $post;
 
-    echo '題名： <input type="text" name="book_name" value="'.get_post_meta($post->ID, 'book_name', true).'" size="50" /><br>';
-	echo '作者： <input type="text" name="book_author" value="'.get_post_meta($post->ID, 'book_author', true).'" size="50" /><br>';
-	echo '価格： <input type="text" name="book_price" value="'.get_post_meta($post->ID, 'book_price', true).'" size="50" />　<br>';
+    echo '<table>' .
+        '<tr><td><label for="cws_event_date">日付</label></td><td><input type="text" id="cws_event_date" name="cws_event_date" value="' . get_post_meta($post->ID, 'cws_event_date', true) . '" /></td></tr>' .
+        '</table>';
 
-    $book_label_check = '';
-    if (get_post_meta($post->ID, 'book_label', true) == 'is_on') {
-        $book_label_check = 'checked';
-    }
-    echo 'ベストセラーラベル: <input type="checkbox" name="book_label" value="is_on"' . $book_label_check. '><br>';
+    echo <<<__JS__
+        <script>
+            $('#cws_event_date').datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+        </script>
+__JS__;
 }
 
 // カスタムフィールドの値を保存
-function save_book_fields( $post_id ) {
-    if(!empty($_POST['book_name'])){ //題名が入力されている場合
-        update_post_meta($post_id, 'book_name', $_POST['book_name'] ); //値を保存
-    }else{ //題名未入力の場合
-        delete_post_meta($post_id, 'book_name'); //値を削除
-    }
-
-    if(!empty($_POST['book_author'])){
-        update_post_meta($post_id, 'book_author', $_POST['book_author'] );
-    }else{
-        delete_post_meta($post_id, 'book_author');
-    }
-
-    if(!empty($_POST['book_price'])){
-        update_post_meta($post_id, 'book_price', $_POST['book_price'] );
-    }else{
-        delete_post_meta($post_id, 'book_price');
-    }
-
-    if(!empty($_POST['book_label'])){
-        update_post_meta($post_id, 'book_label', $_POST['book_label'] );
-    }else{
-        delete_post_meta($post_id, 'book_label');
+function save_event_fields( $post_id ) {
+    if(!empty($_POST['cws_event_date'])){ //日付が入力されている場合
+        update_post_meta($post_id, 'cws_event_date', $_POST['cws_event_date'] ); //値を保存
+    } else { //日付未入力の場合
+        delete_post_meta($post_id, 'cws_event_date'); //値を削除
     }
 }
-add_action('save_post', 'save_book_fields');
+add_action('save_post', 'save_event_fields');
 

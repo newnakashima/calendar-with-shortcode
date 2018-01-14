@@ -36,15 +36,31 @@ nextmonth.addEventListener('click', e => {
     createCalendar(new Date(currentYear, currentMonth - 1, 1));
 });
 
+// データ形式サンプル
 let events = [
     {
         year: 2018,
         month: 2,
         date: 20,
         title: 'test',
-        description: 'test description'
+        description: 'test description',
+        href: 'https://www.google.co.jp'
     }
 ];
+
+// console.log(json_events);
+// 
+// events = json_events.map(e => {
+//     let ev_date = new Date(e.cws_event_date);
+//     return {
+//         year: ev_date.getFullYear(),
+//         month: ev_date.getMonth() + 1,
+//         date: ev_date.getDate(),
+//         title: e.post_title,
+//         description: e.post_content,
+//         href: e.guid
+//     };
+// });
 
 function clearCalendar () {
     const calendar = document.querySelectorAll('.cws-day');
@@ -107,7 +123,11 @@ function createCalendar (date) {
         day.innerHTML = '<a class="cws-day-number">' + i + '</a>';
         calendar.appendChild(day);
     }
-    setEvent(events);
+    ajaxRequest('/wp-json/wp/v2/events', (res) => {
+        let json = JSON.parse(res);
+        console.log(json);
+        createEvents(json);
+    });
 }
 
 function modalShow(description) {
@@ -124,7 +144,7 @@ function modalClose() {
     let bg = document.querySelector('.cws-modal-bg');
     bg.style.display = 'none';
 }
-function setEvent(data) {
+function setEvents(data) {
     data.forEach(d => {
         let target = document.querySelector('#cws-' + pad(d.year, 4) + pad(d.month, 2) + pad(d.date, 2));
         if (target === null) return;
@@ -139,6 +159,40 @@ function setEvent(data) {
 document.querySelector('.cws-modal-close a').addEventListener('click', () => {
     modalClose();
 });
+
+function ajaxRequest(url, callback, method = 'GET') {
+    let xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                callback(xhr.responseText);
+            } else {
+                console.error(xhr.statusText);
+            }
+        }
+    };
+    xhr.onerror = function (e) {
+        console.error(xhr.statusText);
+    };
+    xhr.send(null);
+}
+
+function createEvents(json) {
+    let mapped = json.map(e => {
+        let ev_date = new Date(e.event_meta.cws_event_date);
+        console.log(ev_date);
+        return {
+            year: ev_date.getFullYear(),
+            month: ev_date.getMonth() + 1,
+            date: ev_date.getDate(),
+            title: e.title.rendered,
+            description: e.content.rendered,
+            href: e.link
+        };
+    });
+    setEvents(mapped);
+}
 
 createCalendar(today);
 
