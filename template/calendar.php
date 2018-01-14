@@ -1,22 +1,7 @@
-<?php 
-$events = [];
-// $event_posts = get_posts([
-//     'numberposts' => 100,
-//     'post_type' => 'event',
-//     'meta_key' => 'cws_event_date',
-//     'meta_value' => '',
-// ]);
-// foreach ($event_posts as $e) {
-//     $custom = get_post_custom($e->ID);
-//     $e->cws_event_date = $custom['cws_event_date'][0];
-//     $events[] = $e;
-// }
-?>
-<script>
-// let json_events = <?= json_encode($events, JSON_UNESCAPED_UNICODE) ?>;
-</script>
-
 <div class="cws-calendar">
+  <div class="cws-loading">
+    <img src="<?= plugins_url('', __DIR__) ?>/images/icon_loader_a_bb_01_s1.gif" alt="loading">
+  </div>
   <div class="cws-calendar-header">
     <a class="cws-lastmonth"></a>
     <div class="cws-thismonth">
@@ -36,15 +21,5 @@ $events = [];
   </div>
 </div>
 
-<div class="cws-modal">
-  <div class="cws-modal-container">
-    ...
-  </div>
-  <div class="cws-modal-close">
-    <a>x 閉じる</a>
-  </div>
-</div>
-
-<div class="cws-modal-bg"></div>
 
 <script src="<?= plugins_url('', __DIR__) ?>/js/script.js"></script>

@@ -48,20 +48,6 @@ let events = [
     }
 ];
 
-// console.log(json_events);
-// 
-// events = json_events.map(e => {
-//     let ev_date = new Date(e.cws_event_date);
-//     return {
-//         year: ev_date.getFullYear(),
-//         month: ev_date.getMonth() + 1,
-//         date: ev_date.getDate(),
-//         title: e.post_title,
-//         description: e.post_content,
-//         href: e.guid
-//     };
-// });
-
 function clearCalendar () {
     const calendar = document.querySelectorAll('.cws-day');
     calendar.forEach(e => e.parentNode.removeChild(e));
@@ -125,47 +111,31 @@ function createCalendar (date) {
     }
     ajaxRequest('/wp-json/wp/v2/events', (res) => {
         let json = JSON.parse(res);
-        console.log(json);
         createEvents(json);
     });
 }
 
-function modalShow(description) {
-    let modal = document.querySelector('.cws-modal');
-    modal.style.display = 'block';
-    let content = document.querySelector('.cws-modal-container');
-    content.innerHTML = description;
-    let bg = document.querySelector('.cws-modal-bg');
-    bg.style.display = 'block';
-}
-function modalClose() {
-    let modal = document.querySelector('.cws-modal');
-    modal.style.display = 'none';
-    let bg = document.querySelector('.cws-modal-bg');
-    bg.style.display = 'none';
-}
 function setEvents(data) {
     data.forEach(d => {
         let target = document.querySelector('#cws-' + pad(d.year, 4) + pad(d.month, 2) + pad(d.date, 2));
         if (target === null) return;
-        let eventdom = document.createElement('div');
-        eventdom.innerText = d.title;
-        eventdom.addEventListener('click', () => {
-            modalShow(d.description);
-        });
+        let eventdom = document.createElement('a');
+        eventdom.classList.add('cws-event-title');
+        eventdom.innerHTML = d.title;
+        eventdom.href = d.href;
         target.appendChild(eventdom);
     });
 }
-document.querySelector('.cws-modal-close a').addEventListener('click', () => {
-    modalClose();
-});
 
 function ajaxRequest(url, callback, method = 'GET') {
+    let loading = document.querySelector('.cws-loading');
+    loading.style.display = 'block';
     let xhr = new XMLHttpRequest();
     xhr.open(method, url);
     xhr.onload = function (e) {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
+                loading.style.display = 'none';
                 callback(xhr.responseText);
             } else {
                 console.error(xhr.statusText);
@@ -181,7 +151,6 @@ function ajaxRequest(url, callback, method = 'GET') {
 function createEvents(json) {
     let mapped = json.map(e => {
         let ev_date = new Date(e.event_meta.cws_event_date);
-        console.log(ev_date);
         return {
             year: ev_date.getFullYear(),
             month: ev_date.getMonth() + 1,

@@ -69,6 +69,7 @@ function create_post_type() {
         'editor',
         'thumbnail',
         'revisions',
+        'excerpt',
     ];
     register_post_type('event', [
         'label' => 'イベント',

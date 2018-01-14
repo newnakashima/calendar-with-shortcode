@@ -1,5 +1,5 @@
 .cws-calendar {
-    
+    position: relative;
 }
 
 .cws-sun {
@@ -69,6 +69,8 @@ a.cws-nextmonth:after {
 }
 .cws-day {
     min-height: 5em;
+    font-size: .5em;
+    word-wrap: break-word;
 }
 .cws-today {
     background-color: #88ffff;
@@ -79,32 +81,18 @@ a.cws-nextmonth:after {
 .cws-next-month {
     background-color: #dddddd;
 }
-
-/* モーダル */
-.cws-modal {
+.cws-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: none;
-    z-index: 2000;
-    position: fixed;
-    width: 50%;
-    left: calc(50vw - 25%);
-    top: 25vh;
-    background-color: #fff;
 }
 
-.cws-modal-bg {
-    display: none;
-    z-index: 1000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 120%;
-    background-color: #00000088;
+.cws-event-title {
+    display: block;
+}
+.cws-event-content {
+    font-size: .5rem;
 }
 
-@media screen and (max-width: 768px) {
-    .cws-modal {
-        width: 80%;
-        left: calc(50vw - 40%);
-    }
-}
