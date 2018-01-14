@@ -22,6 +22,10 @@ add_action( 'admin_menu', 'my_submenu' );
 // add_action( 'widgets_init', function() {
 //     register_widget( 'My_Widget' );
 // });
+//
+
+global $wp_rewrite;
+$wp_rewrite->flush_rules();
 
 /** ステップ1 */
 function my_plugin_menu() {
