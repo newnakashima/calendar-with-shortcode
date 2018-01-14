@@ -49,6 +49,10 @@ function my_plugin_submenu() {
 // [calendar]
 function calendar_function( $atts ) {
     ob_start();
+    $a = shortcode_atts([
+        'type' => 'shoutengai',
+        'date' => (new DateTime())->format('Y-m-d'),
+    ], $atts, 'calendar');
     require(__DIR__ . '/template/calendar.php');
     $buffer = ob_get_contents();
     ob_end_clean();
@@ -80,7 +84,11 @@ function create_post_type() {
         'show_in_rest' => true,
         'rest_base' => 'events',
     ]);
-    register_taxonomy('event_type', 'event', ['label' => 'イベントタイプ', 'hierarchical' => true]);
+    register_taxonomy('event_type', 'event', [
+        'label' => 'イベントタイプ',
+        'hierarchical' => true,
+        'show_in_rest' => true,
+    ]);
 }
 add_action('init', 'create_post_type');
 

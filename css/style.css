@@ -68,7 +68,7 @@ a.cws-nextmonth:after {
     padding: .4em;
 }
 .cws-day {
-    min-height: 5em;
+    min-height: 8rem;
     font-size: .5em;
     word-wrap: break-word;
 }

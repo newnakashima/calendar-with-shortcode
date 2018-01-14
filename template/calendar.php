@@ -21,5 +21,4 @@
   </div>
 </div>
 
-
-<script src="<?= plugins_url('', __DIR__) ?>/js/script.js"></script>
+<script src="<?= plugins_url('', __DIR__) ?>/js/script.js?type=<?= $a['type'] ?>></script>

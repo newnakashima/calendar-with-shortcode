@@ -1,3 +1,17 @@
+function getQuery(url) {
+    var queryStr = url.split('?')[1];
+    var querys = queryStr.split('&');
+    var keyValues = new Object;
+    querys.forEach(function(t, i){
+        var kv = t.split('=');
+        keyValues[kv[0]] = kv[1];
+    });
+    return {
+        keyValues: keyValues,
+        queryString: queryStr
+    };
+}
+
 const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const today = new Date();
 let currentYear = today.getFullYear();
